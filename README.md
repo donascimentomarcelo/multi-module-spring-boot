@@ -1,0 +1,1 @@
+mvn clean install -pl shared,app1 -DskipTests
