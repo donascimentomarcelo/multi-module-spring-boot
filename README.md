@@ -85,11 +85,11 @@ The shared module must follow the pom below:
             <version>0.0.1</version>
             <relativePath>../pom.xml</relativePath>
         </parent>
-    <groupId>br.com.api</groupId>
-    <artifactId>shared</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>shared</name>
-    <description>Shared App</description>
+        <groupId>br.com.api</groupId>
+        <artifactId>shared</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <name>shared</name>
+        <description>Shared App</description>
         <properties>
             <java.version>21</java.version>
         </properties>
@@ -106,3 +106,65 @@ The shared module must follow the pom below:
 Do not forget to remove the `spring-boot-maven-plugin`, otherwise this plugin will take the JAR existing JAR and
 repacking it. The result puts your classes in a location where Spring Boot can find them, but not the regular class
 loading mechanism.
+
+#### - app1, app2, app3 module
+
+All of them, must follow the same structure, importing the shared dependency and pointing the parent tag to the root 
+project.
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+        <parent>
+            <groupId>br.com.root</groupId>
+            <artifactId>root</artifactId>
+            <version>0.0.1</version>
+            <relativePath>../pom.xml</relativePath>
+        </parent>
+        <groupId>br.com.api</groupId>
+        <artifactId>app1</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <name>app1</name>
+        <description>App 1</description>
+        <properties>
+            <java.version>21</java.version>
+        </properties>
+        <dependencies>
+            <dependency>
+                <groupId>br.com.api</groupId>
+                <artifactId>shared</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            ... your dependencies
+        </dependencies>
+        
+        <build>
+            <plugins>
+                <plugin>
+                    ... your plugins
+                </plugin>
+            </plugins>
+        </build>
+    </project>
+
+And that's all! We can test only one module with `mvn clean install -pl shared,app1 -DskipTests` or you can run all 
+projects running `mvn clean install -DskipTests`.
+
+The result must be like this:
+
+    [INFO] Reactor Summary:
+    [INFO]
+    [INFO] root 0.0.1 ......................................... SUCCESS [  0.222 s]
+    [INFO] shared 0.0.1-SNAPSHOT .............................. SUCCESS [  1.512 s]
+    [INFO] app1 0.0.1-SNAPSHOT ................................ SUCCESS [  2.369 s]
+    [INFO] app2 0.0.1-SNAPSHOT ................................ SUCCESS [  1.644 s]
+    [INFO] app3 0.0.1-SNAPSHOT ................................ SUCCESS [  1.514 s]
+    [INFO] ------------------------------------------------------------------------
+    [INFO] BUILD SUCCESS
+    [INFO] ------------------------------------------------------------------------
+    [INFO] Total time:  7.637 s
+    [INFO] Finished at: 2025-01-27T21:27:38-03:00
+    [INFO] ------------------------------------------------------------------------
+
+🖥️💻 ️Your code is mine!
